@@ -2,6 +2,10 @@ import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
 import connectDB from './config/db.js';
+import dashboardRoutes from './routes/dashboard.js';
+import districtRoutes from './routes/districts.js';
+import grantRoutes from './routes/grants.js';
+import reviewRoutes from './routes/review.js';
 
 dotenv.config();
 connectDB();
@@ -18,11 +22,22 @@ app.get('/api/health', (req, res) => {
     res.json({ status: 'OK', message: 'PBL Intelligence API is running' });
 });
 
-// Routes (we'll add these in later steps)
-// app.use('/api/dashboard', dashboardRoutes);
-// app.use('/api/districts', districtRoutes);
-// app.use('/api/grants', grantRoutes);
-// app.use('/api/review', reviewRoutes);
+// Routes
+app.use('/api/dashboard', dashboardRoutes);
+app.use('/api/districts', districtRoutes);
+app.use('/api/grants', grantRoutes);
+app.use('/api/review', reviewRoutes);
+
+// 404 handler
+app.use((req, res) => {
+  res.status(404).json({ success: false, message: `Route ${req.path} not found` });
+});
+
+// Global error handler
+app.use((err, req, res, next) => {
+  console.error(err.stack);
+  res.status(500).json({ success: false, message: 'Internal server error' });
+});
 
 const PORT = process.env.PORT || 5000;
 
