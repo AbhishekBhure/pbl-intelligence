@@ -301,7 +301,19 @@ const GrantReporting = () => {
 
                             {/* Narrative Text */}
                             <div style={styles.narrativeText}>
-                                {narrative.narrative?.narrative}
+                                {narrative.narrative?.narrative
+                                    ?.split('\n')
+                                    .map((line, i) => {
+                                        const cleaned = line.replace(/\*\*(.*?)\*\*/g, '$1');
+                                        return (
+                                            <p key={i} style={{
+                                                margin: cleaned.trim() === '' ? '8px 0' : '0 0 12px 0',
+                                                fontWeight: cleaned !== line ? '700' : '400',
+                                            }}>
+                                                {cleaned}
+                                            </p>
+                                        );
+                                    })}
                             </div>
                         </div>
                     )}

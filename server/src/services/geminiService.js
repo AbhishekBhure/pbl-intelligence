@@ -6,7 +6,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 dotenv.config({ path: join(__dirname, '../../.env') });
 
-const GEMINI_API_URL = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent';
+const GEMINI_API_URL = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent';
 
 // ─── Core Gemini caller ──────────────────────────────────────────────────────
 const callGemini = async (prompt) => {
@@ -17,7 +17,7 @@ const callGemini = async (prompt) => {
             contents: [{ parts: [{ text: prompt }] }],
             generationConfig: {
                 temperature: 0.3,
-                maxOutputTokens: 1024,
+                maxOutputTokens: 2048,
             },
         }),
     });
