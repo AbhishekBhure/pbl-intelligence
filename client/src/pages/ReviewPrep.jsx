@@ -232,15 +232,25 @@ const ReviewPrep = () => {
                                                 {meta.icon} {section.title}
                                             </div>
                                             <div style={styles.sectionCardContent}>
-                                                {section.content.split('\n').filter(Boolean).map((line, i) => (
-                                                    <div key={i} style={styles.sectionLine}>
-                                                        {line.startsWith('-') ? (
-                                                            <span>• {line.slice(1).trim()}</span>
-                                                        ) : (
-                                                            <span>{line}</span>
-                                                        )}
-                                                    </div>
-                                                ))}
+                                                {section.content.split('\n').filter(Boolean).map((line, i) => {
+                                                    // Remove all markdown symbols
+                                                    const cleaned = line
+                                                        .replace(/\*\*(.*?)\*\*/g, '$1')  // bold
+                                                        .replace(/^\*+\d*\.?\**$/, '')     // lone * or **2. etc
+                                                        .replace(/^\*\s*/, '')             // leading *
+                                                        .replace(/^-\s*/, '')              // leading -
+                                                        .trim();
+
+                                                    if (!cleaned) return null;
+
+                                                    const isBullet = line.trimStart().startsWith('*') || line.trimStart().startsWith('-');
+
+                                                    return (
+                                                        <div key={i} style={styles.sectionLine}>
+                                                            {isBullet ? `• ${cleaned}` : cleaned}
+                                                        </div>
+                                                    );
+                                                })}
                                             </div>
                                         </div>
                                     );
